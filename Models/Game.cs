@@ -70,15 +70,20 @@ namespace GoBang.Models
             int currentX = board.LastPiecePoint.X;
             int currentY = board.LastPiecePoint.Y;
 
-            int count = 1;
+            int count;
+            int verticalCount = 1;
+            int horizontalCount = 1;
+            int upSlashCount = 1;
+            int downSlashCount = 1;
 
             for (int xDir = -1; xDir <= 1; xDir += 1) 
             {
-                for(int yDir = -1;yDir <=1; yDir += 1)
+                count = 1;
+                for (int yDir = -1;yDir <=1; yDir += 1)
                 {
                     if (xDir == 0 && yDir == 0) continue;
 
-                    while (count < 5)
+                    while (verticalCount < 5 && horizontalCount < 5 && upSlashCount < 5 && downSlashCount < 5)
                     {
                         int targetX = currentX + count * xDir;
                         int targetY = currentY + count * yDir;
@@ -88,12 +93,36 @@ namespace GoBang.Models
                             board.GetCurrentPieceType(targetX, targetY) != currentPlayer
                           ) break;
 
+                        // 水平線計數
+                        if((xDir == -1 && yDir == 0) || (xDir == 1 && yDir == 0))
+                        {
+                            horizontalCount += 1;
+                        }
+
+                        // 垂直線計數
+                        if ((xDir == 0 && yDir == 1) || (xDir == 0 && yDir == -1))
+                        {
+                            verticalCount += 1;
+                        }
+
+                        // 左上到右下線計數
+                        if ((xDir == -1 && yDir == -1) || (xDir == 1 && yDir == 1))
+                        {
+                            upSlashCount += 1;
+                        }
+
+                        // 右下到左上線計數
+                        if ((xDir == -1 && yDir == 1) || (xDir == 1 && yDir == -1))
+                        {
+                            downSlashCount += 1;
+                        }
+
                         count++;
                     }
                 }
             }
 
-            if (count == 5)
+            if (verticalCount == 5 || horizontalCount == 5 || upSlashCount == 5 || downSlashCount == 5)
                 winner = currentPlayer;
         }
     }
