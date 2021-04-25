@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GoBang.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,8 @@ namespace GoBang
         public Form1()
         {
             InitializeComponent();
+            this.Controls.Add(new BlackPiece(100, 100));
+            this.Controls.Add(new WhitePiece(200, 200));
         }
 
     }
