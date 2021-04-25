@@ -11,11 +11,13 @@ namespace GoBang.Models
     /// </summary>
     public abstract class BasePiece : PictureBox
     {
+        private const int baseSize = 50;
+
         public BasePiece(int x,int y)
         {
             this.BackColor = Color.Transparent;
-            this.Size = new Size(50, 50);
-            this.Location = new Point(x, y);
+            this.Size = new Size(baseSize, baseSize);
+            this.Location = new Point(x - baseSize / 2, y - baseSize / 2);
         }
     }
 }
