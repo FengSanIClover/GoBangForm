@@ -10,7 +10,11 @@ namespace GoBang.Models
     public class Game
     {
         // 下一個棋子顏色
-        private PieceType nextPlayer = PieceType.Black;
+        private PieceType currentPlayer = PieceType.Black;
+
+        // 贏家
+        private PieceType winner = PieceType.None;
+        public PieceType Winner { get => winner; }
 
         // 棋盤動作類別
         private Board board;
@@ -28,16 +32,19 @@ namespace GoBang.Models
         /// <returns></returns>
         public BasePiece PlaceAPiece(int x, int y)
         {
-            var piece = board.PlaceAPiece(x, y, nextPlayer);
+            var piece = board.PlaceAPiece(x, y, currentPlayer);
             if(piece != null)
             {
-                if (nextPlayer == PieceType.Black)
+                // 確認是否獲勝
+                CheckWinner();
+
+                if (currentPlayer == PieceType.Black)
                 {
-                    nextPlayer = PieceType.White;
+                    currentPlayer = PieceType.White;
                 }
                 else
                 {
-                    nextPlayer = PieceType.Black;
+                    currentPlayer = PieceType.Black;
                 }
             }
 
@@ -53,6 +60,41 @@ namespace GoBang.Models
         public bool CanBePlaced(int x, int y)
         {
             return board.CanBePlaced(x, y);
+        }
+
+        /// <summary>
+        /// 判斷是否獲勝
+        /// </summary>
+        private void CheckWinner()
+        {
+            int currentX = board.LastPiecePoint.X;
+            int currentY = board.LastPiecePoint.Y;
+
+            int count = 1;
+
+            for (int xDir = -1; xDir <= 1; xDir += 1) 
+            {
+                for(int yDir = -1;yDir <=1; yDir += 1)
+                {
+                    if (xDir == 0 && yDir == 0) continue;
+
+                    while (count < 5)
+                    {
+                        int targetX = currentX + count * xDir;
+                        int targetY = currentY + count * yDir;
+                        if (
+                            targetX < 0 || targetX >= Board.MaxCount ||
+                            targetY < 0 || targetY >= Board.MaxCount ||
+                            board.GetCurrentPieceType(targetX, targetY) != currentPlayer
+                          ) break;
+
+                        count++;
+                    }
+                }
+            }
+
+            if (count == 5)
+                winner = currentPlayer;
         }
     }
 }

@@ -38,7 +38,11 @@ namespace GoBang.Models
         /// <summary>
         /// 最大座標位置
         /// </summary>
-        private static readonly int MaxCount = 9;
+        public static readonly int MaxCount = 9;
+
+        // 最後一顆棋子位置
+        private static Point lastPiecePoint = NO_MATCH;
+        public Point LastPiecePoint { get => lastPiecePoint; }
 
         /// <summary>
         /// 判斷是否可以放置棋子
@@ -91,6 +95,9 @@ namespace GoBang.Models
 
             if(type == PieceType.White)
                 pieces[closetNode.X, closetNode.Y] = new WhitePiece(formPoint.X, formPoint.Y);
+
+            // 紀錄最後一顆棋子位置
+            lastPiecePoint = closetNode;
 
             return pieces[closetNode.X, closetNode.Y];
         }

@@ -35,6 +35,16 @@ namespace GoBang
             if(piece != null)
             {
                 this.Controls.Add(piece);
+
+                if(game.Winner == PieceType.Black)
+                {
+                    MessageBox.Show("黑色贏了");
+                }
+
+                if (game.Winner == PieceType.White)
+                {
+                    MessageBox.Show("白色贏了");
+                }
             }
         }
 
