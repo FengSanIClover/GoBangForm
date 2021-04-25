@@ -10,6 +10,7 @@ namespace GoBang.Models
     public enum PieceType
     {
         Black = 0,
-        White = 1
+        White = 1,
+        None = 99
     }
 }

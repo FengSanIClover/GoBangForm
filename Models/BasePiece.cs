@@ -19,5 +19,11 @@ namespace GoBang.Models
             this.Size = new Size(baseSize, baseSize);
             this.Location = new Point(x - baseSize / 2, y - baseSize / 2);
         }
+
+        /// <summary>
+        /// 取得棋子顏色
+        /// </summary>
+        /// <returns></returns>
+        public abstract PieceType GetPieceType(); 
     }
 }

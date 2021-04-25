@@ -13,5 +13,14 @@ namespace GoBang.Models
         {
             this.Image = Properties.Resources.black;
         }
+
+        /// <summary>
+        /// 取得棋子顏色
+        /// </summary>
+        /// <returns></returns>
+        public override PieceType GetPieceType()
+        {
+            return PieceType.Black;
+        }
     }
 }

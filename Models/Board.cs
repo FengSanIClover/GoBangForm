@@ -36,6 +36,11 @@ namespace GoBang.Models
         private static BasePiece[,] pieces = new BasePiece[9, 9];
 
         /// <summary>
+        /// 最大座標位置
+        /// </summary>
+        private static readonly int MaxCount = 9;
+
+        /// <summary>
         /// 判斷是否可以放置棋子
         /// </summary>
         /// <param name="x"></param>
@@ -107,6 +112,20 @@ namespace GoBang.Models
         }
 
         /// <summary>
+        /// 取得當前棋子顏色
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public PieceType GetCurrentPieceType(int x,int y)
+        {
+            if (pieces[x, y] == null)
+                return PieceType.None;
+
+            return pieces[x, y].GetPieceType();
+        }
+
+        /// <summary>
         /// 找出最近的節點(二維)
         /// </summary>
         /// <param name="x"></param>
@@ -114,14 +133,14 @@ namespace GoBang.Models
         /// <returns></returns>
         private Point FindClosetNode(int x, int y) 
         {
-            // 判斷並取得 X 節點位置
+            // 判斷並取得 X 節點位置，是否存在或超出最大位置
             int indexX = FindClosetNode(x);
-            if (indexX == -1)
+            if (indexX == -1 || indexX >= MaxCount)
                 return NO_MATCH;
 
-            // 判斷並取得 Y 座標位置
+            // 判斷並取得 Y 座標位置，是否存在或超出最大位置
             int indexY = FindClosetNode(y);
-            if (indexY == -1)
+            if (indexY == -1 || indexY >= MaxCount)
                 return NO_MATCH;
 
             return new Point(indexX,indexY);
