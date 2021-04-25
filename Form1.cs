@@ -13,15 +13,6 @@ namespace GoBang
 {
     public partial class Form1 : Form
     {
-        /// <summary>
-        /// 棋子類別列舉
-        /// </summary>
-        private enum PieceType
-        {
-            Black = 0,
-            White = 1
-        }
-
         // 下一個棋子顏色
         private PieceType nextType = PieceType.Black;
         // 棋盤動作類別
@@ -42,18 +33,22 @@ namespace GoBang
         /// <param name="e"></param>
         private void MouseDownEvent(object sender, MouseEventArgs e) 
         {
-            if(nextType == PieceType.Black) 
+            BasePiece piece = board.PlaceAPiece(e.X, e.Y, nextType);
+            if(piece != null)
             {
-                this.Controls.Add(new BlackPiece(e.X, e.Y));
-                nextType = PieceType.White;
+                this.Controls.Add(piece);
 
-                return;
-            }
+                if (nextType == PieceType.Black)
+                {
+                    nextType = PieceType.White;
 
-            if(nextType == PieceType.White)
-            {
-                this.Controls.Add(new WhitePiece(e.X, e.Y));
-                nextType = PieceType.Black;
+                    return;
+                }
+
+                if (nextType == PieceType.White)
+                {
+                    nextType = PieceType.Black;
+                }
             }
         }
 

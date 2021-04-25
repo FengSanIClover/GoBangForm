@@ -31,6 +31,11 @@ namespace GoBang.Models
         private static readonly Point NO_MATCH = new Point(-1, -1);
 
         /// <summary>
+        /// 棋盤位置
+        /// </summary>
+        private static BasePiece[,] pieces = new BasePiece[9, 9];
+
+        /// <summary>
         /// 判斷是否可以放置棋子
         /// </summary>
         /// <param name="x"></param>
@@ -46,8 +51,59 @@ namespace GoBang.Models
                 return false;
 
             // 判斷是否已經被放過棋子
+            if (pieces[closetNode.X, closetNode.Y] != null)
+                return false;
 
             return true;
+        }
+
+        /// <summary>
+        /// 放置棋子方法
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public BasePiece PlaceAPiece(int x,int y, PieceType type)
+        {
+            // 找出最近的節點
+            var closetNode = FindClosetNode(x, y);
+
+            // 如果沒有就回傳 null
+            if (closetNode == NO_MATCH)
+                return null;
+
+            // 判斷位置是否已經擺放棋子，若有則不給放
+            if (pieces[closetNode.X, closetNode.Y] != null)
+                return null;
+
+            // 取得表單實際座標點
+            Point formPoint = GetFormPoint(closetNode);
+
+            // 根據型態判斷要擺放的顏色
+            if (type == PieceType.Black)
+                pieces[closetNode.X, closetNode.Y] = new BlackPiece(formPoint.X, formPoint.Y);
+
+            if(type == PieceType.White)
+                pieces[closetNode.X, closetNode.Y] = new WhitePiece(formPoint.X, formPoint.Y);
+
+            return pieces[closetNode.X, closetNode.Y];
+        }
+
+        /// <summary>
+        /// 將鄰近節點位置轉換為實際座標
+        /// </summary>
+        /// <param name="closetNode"></param>
+        /// <returns></returns>
+        private Point GetFormPoint(Point closetNode) 
+        {
+            var resPoint = new Point();
+
+            // 實際位置  = 邊界 + 鄰近座標 * 間隔距離
+            resPoint.X = OFFSET + closetNode.X * NODE_DISTANCE;
+            resPoint.Y = OFFSET + closetNode.Y * NODE_DISTANCE;
+
+            return resPoint;
         }
 
         /// <summary>
