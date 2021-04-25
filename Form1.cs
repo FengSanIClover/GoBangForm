@@ -22,15 +22,24 @@ namespace GoBang
             White = 1
         }
 
+        // 下一個棋子顏色
         private PieceType nextType = PieceType.Black;
+        // 棋盤動作類別
+        private Board board;
 
         public Form1()
         {
             InitializeComponent();
-
+            board = new Board();
             this.MouseDown += MouseDownEvent;
+            this.MouseMove += MouseMoveEvent;
         }
 
+        /// <summary>
+        /// 滑鼠點選事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MouseDownEvent(object sender, MouseEventArgs e) 
         {
             if(nextType == PieceType.Black) 
@@ -46,7 +55,22 @@ namespace GoBang
                 this.Controls.Add(new WhitePiece(e.X, e.Y));
                 nextType = PieceType.Black;
             }
+        }
 
+        /// <summary>
+        /// 滑鼠移動事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MouseMoveEvent(object sender, MouseEventArgs e)
+        {
+            if (board.CanBePlaced(e.X, e.Y))
+            {
+                this.Cursor = Cursors.Hand;
+            } else
+            {
+                this.Cursor = Cursors.Default;
+            }
         }
 
     }
